@@ -1,0 +1,152 @@
+import gradio as gr
+import random  # Needed for random sampling
+
+books_db = {
+  "Fantasy": [
+    {
+      "title": "The Name of the Wind",
+      "author": "Patrick Rothfuss",
+      "year": 2007,
+      "description": "A tale of a magically gifted young man who grows up to be the most notorious wizard his world has ever seen.",
+      "openlibrary_url": "https://openlibrary.org/works/OL82563W"
+    },
+    {
+      "title": "Mistborn: The Final Empire",
+      "author": "Brandon Sanderson",
+      "year": 2006,
+      "description": "In a world where ash falls from the sky and mist dominates the night, a revolution brews.",
+      "openlibrary_url": "https://openlibrary.org/works/OL13978909W"
+    },
+    {
+      "title": "The Hobbit",
+      "author": "J.R.R. Tolkien",
+      "year": 1937,
+      "description": "Bilbo Baggins joins a group of dwarves on a quest to reclaim their homeland from a dragon.",
+      "openlibrary_url": "https://openlibrary.org/works/OL51913W"
+    }
+  ],
+  "SciFi": [
+    {
+      "title": "Dune",
+      "author": "Frank Herbert",
+      "year": 1965,
+      "description": "A sprawling epic of politics, religion, and ecology on the desert planet Arrakis.",
+      "openlibrary_url": "https://openlibrary.org/works/OL27448W"
+    },
+    {
+      "title": "Neuromancer",
+      "author": "William Gibson",
+      "year": 1984,
+      "description": "A washed-up computer hacker is hired for one last job in a cyberpunk future.",
+      "openlibrary_url": "https://openlibrary.org/works/OL73477W"
+    },
+    {
+      "title": "The Martian",
+      "author": "Andy Weir",
+      "year": 2011,
+      "description": "An astronaut stranded on Mars must use his ingenuity to survive until rescue.",
+      "openlibrary_url": "https://openlibrary.org/works/OL15819855W"
+    }
+  ],
+  "Mystery": [
+    {
+      "title": "The Girl with the Dragon Tattoo",
+      "author": "Stieg Larsson",
+      "year": 2005,
+      "description": "A journalist and a hacker uncover secrets while investigating a decades-old disappearance.",
+      "openlibrary_url": "https://openlibrary.org/works/OL15820213W"
+    },
+    {
+      "title": "Gone Girl",
+      "author": "Gillian Flynn",
+      "year": 2012,
+      "description": "A man becomes the prime suspect in his wife’s disappearance and uncovers dark secrets.",
+      "openlibrary_url": "https://openlibrary.org/works/OL17308776W"
+    },
+    {
+      "title": "And Then There Were None",
+      "author": "Agatha Christie",
+      "year": 1939,
+      "description": "Ten strangers are invited to a remote island, where they are murdered one by one.",
+      "openlibrary_url": "https://openlibrary.org/works/OL14901725W"
+    }
+  ],
+  "Romance": [
+    {
+      "title": "Pride and Prejudice",
+      "author": "Jane Austen",
+      "year": 1813,
+      "description": "A spirited young woman navigates love, class, and family in 19th-century England.",
+      "openlibrary_url": "https://openlibrary.org/works/OL54120W"
+    },
+    {
+      "title": "The Notebook",
+      "author": "Nicholas Sparks",
+      "year": 1996,
+      "description": "A man reads the story of a young couple's romance from a notebook to a woman in a nursing home.",
+      "openlibrary_url": "https://openlibrary.org/works/OL15145552W"
+    },
+    {
+      "title": "Outlander",
+      "author": "Diana Gabaldon",
+      "year": 1991,
+      "description": "A World War II nurse is transported back to 1743 Scotland, where she falls for a Highland warrior.",
+      "openlibrary_url": "https://openlibrary.org/works/OL17901402W"
+    }
+  ],
+  "Thriller": [
+    {
+      "title": "The Da Vinci Code",
+      "author": "Dan Brown",
+      "year": 2003,
+      "description": "A symbologist uncovers a religious conspiracy through codes hidden in famous artworks.",
+      "openlibrary_url": "https://openlibrary.org/works/OL8250413W"
+    },
+    {
+      "title": "The Silence of the Lambs",
+      "author": "Thomas Harris",
+      "year": 1988,
+      "description": "A young FBI trainee seeks the help of a brilliant cannibalistic killer to catch another murderer.",
+      "openlibrary_url": "https://openlibrary.org/works/OL15000516W"
+    },
+    {
+      "title": "Before I Go to Sleep",
+      "author": "S.J. Watson",
+      "year": 2011,
+      "description": "A woman with amnesia tries to piece together her life after waking up each day with no memory.",
+      "openlibrary_url": "https://openlibrary.org/works/OL15438688W"
+    }
+  ]
+}
+
+def recommend_books(genre_preference=None):
+    if genre_preference not in books_db:
+        return "Sorry, we currently don't have any recommendations for that genre."
+
+    genre_books = books_db[genre_preference]
+    selected_books = random.sample(genre_books, min(2, len(genre_books)))
+
+    recommendations = f"📚 Recommended Books for {genre_preference}:\n\n"
+
+    for book in selected_books:
+        recommendations += f"{book['title']} ({book['year']}) by {book['author']}\n"
+        recommendations += f"{book['description']}\n"
+        recommendations += f"{book['openlibrary_url']}\n\n"
+
+    return recommendations
+
+# Create the interface
+demo = gr.Interface(
+    fn=recommend_books,
+    inputs=[
+        gr.Dropdown(["Fantasy", "SciFi", "Mystery", "Thriller", "Romance"])
+    ],
+    outputs=[
+        gr.Textbox(label="📚 Book Recommendations")
+    ],
+    title="Recommended Books by Genre",
+    description="Get book recommendations based on the genre you like"
+)
+
+if __name__ == "__main__":
+    demo.launch()
