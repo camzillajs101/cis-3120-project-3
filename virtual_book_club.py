@@ -58,4 +58,27 @@ Subjects: [list of book subjects, comma-delimited]
 title = work["title"]
 subjects = ', '.join(work["subject"][:20]) # limit to first 20 listed subjects
 
-print(f"Title: {title}\nSubjects: {subjects}")
+# print(f"Title: {title}\nSubjects: {subjects}")
+
+foreprompt = "Generate a short summary of a book using the following information about the book:\n\n"
+prompt = f"{foreprompt}Title: {title}\nSubjects: {subjects}"
+
+print(prompt+"\n")
+
+# Ollama API endpoint
+OLLAMA = "http://localhost:11434/api/generate"
+payload = {
+	"model": "tinyllama",
+	"prompt": prompt,
+	"stream": False
+}
+
+try:
+	response = requests.post(OLLAMA,json=payload)
+
+	if response.status_code == 200:
+		print(response.json()["response"])
+	else:
+		print("Error")
+except Exception as e:
+	print(e)
