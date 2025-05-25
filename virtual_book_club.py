@@ -40,4 +40,22 @@ index = random.randint(0,10) # don't select the first book every time; random ch
 
 work = json_data["works"][index]
 
-print(json.dumps(work,indent=4))
+# print(json.dumps(work,indent=4))
+
+"""
+Prompt construction:
+
+You are an assistant that generates brief, thoughtful summaries of books based on their title and a list of subjects.
+Do not make up plot details or specific events. Use the title and subject tags to infer the general themes, tone, and likely type of story.
+Your goal is to write a 2–3 sentence summary that captures what someone might expect from reading this book, based on those elements alone.
+
+Generate a 2-3 sentence summary of a book and 2-3 relevant discussion questions for a book club using the following information:
+
+Title: [book title]
+Subjects: [list of book subjects, comma-delimited]
+"""
+
+title = work["title"]
+subjects = ', '.join(work["subject"][:20]) # limit to first 20 listed subjects
+
+print(f"Title: {title}\nSubjects: {subjects}")
