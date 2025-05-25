@@ -31,12 +31,12 @@ genres = {
 }
 
 url = "https://www.openlibrary.org/subjects/"
-genre = "historical fiction"
+genre = "dystopian"
 
 response = requests.get(url + genres[genre] + ".json")
 json_data = response.json()
 
-index = random.randint(0,10) # don't select the first book every time; random choice of top ten results
+index = random.randint(0,15) # don't select the first book every time; random choice of top results
 
 work = json_data["works"][index]
 
@@ -57,11 +57,12 @@ Subjects: [list of book subjects, comma-delimited]
 
 title = work["title"]
 subjects = ', '.join(work["subject"][:20]) # limit to first 20 listed subjects
+author = work["authors"][0]["name"]
 
-# print(f"Title: {title}\nSubjects: {subjects}")
+# print(f"Title: {title}\nAuthor: {author}\nSubjects: {subjects}")
 
-foreprompt = "Generate a short summary of a book using the following information about the book:\n\n"
-prompt = f"{foreprompt}Title: {title}\nSubjects: {subjects}"
+foreprompt = "Generate a short summary of a book using the following information about the book:"
+prompt = f"{foreprompt}\n\nTitle: {title}\nAuthor: {author}\nSubjects: {subjects}"
 
 print(prompt+"\n")
 
