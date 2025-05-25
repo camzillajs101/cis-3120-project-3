@@ -36,4 +36,8 @@ genre = "historical fiction"
 response = requests.get(url + genres[genre] + ".json")
 json_data = response.json()
 
-print(json.dumps(json_data,indent=4))
+index = random.randint(0,10) # don't select the first book every time; random choice of top ten results
+
+work = json_data["works"][index]
+
+print(json.dumps(work,indent=4))
